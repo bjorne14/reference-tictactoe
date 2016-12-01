@@ -1,0 +1,53 @@
+#!/bin/bash
+# Script which builds a project by an predefined "npm build" script, it then creates an docker image which is shipped to DockerHub.com
+# Author: Björn Ingemar Elfström
+
+USERNAME="bjorne14"
+PROJECT_NAME="tictactoe"
+DOCKER_FILE="."
+
+# Initializes the script by getting all necessary repository information
+echo "<============== Initializing ==============>"
+if [ -z "$GIT_COMMIT" ]; then
+    export GIT_COMMIT=$(git rev-parse HEAD)
+    export GIT_URL=$(git config --get remote.origin.url)
+fi
+
+# Removes .git from url in order to get link to repo(ATH: Assumes a https connection)
+export GITHUB_URL=$(echo $GIT_URL | rev | cut -c 5-| rev)
+echo -e "Done..\n"
+
+# Builds the project by the predefined "npm build" script.
+echo "<================ Building ================>"
+npm build
+
+retc=$?
+if [[ $retc != 0 ]]; then 
+    echo "Npm build failed with exit code : " $retc
+    exit $retc
+fi
+echo -e "Done..\nBuild of application was successful, it can be found in ./build\n"
+
+# Builds the Docker container from the Dockerfile.
+echo "<============ Building Docker =============>"
+docker build -t $USERNAME/$PROJECT_NAME:$GIT_COMMIT $DOCKER_FILE
+
+retc=$?
+if [[ $retc != 0 ]]; then
+    echo "Docker build failed with exit code : " $retc
+    exit $retc
+fi
+echo -e "\nDone..\nDocker build of container was successful\n"
+
+
+# Pushes the Docker Image to Dockerhub
+echo "<========== Pushing Docker Image ==========>"
+docker login
+docker push $USERNAME/$PROJECT_NAME:$GIT_COMMIT
+
+retc=$?
+if [[ $retc != 0 ]]; then
+    echo "Docker push failed with exit code : " $retc
+    exit $retc
+fi
+echo -e "\nDone..\nThe Docker Image: "$USERNAME/$PROJECT_NAME:$GIT_COMMIT " was pushed to your Dockerhub"
