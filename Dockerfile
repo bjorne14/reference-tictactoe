@@ -12,6 +12,5 @@ COPY ./package.json /app/package.json
 #Expose port 80
 EXPOSE 80
 
-#Install server and run it at startup
+#Install server
 RUN npm install
-CMD ["node", "run.js"]
