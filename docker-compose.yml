@@ -1,0 +1,22 @@
+version: '2'
+
+services:    
+    server:
+        ports:
+            - "8080:8080"
+        build:
+            context: "."
+            dockerfile: 'Dockerfile'
+        environment:
+            NODE_ENV: production
+        depends_on:
+            - db
+    db:
+        image: postgres:latest
+        environment:
+            PGUSER: postgres
+            PGPASSWORD: mysecretpassword
+            PGDATABASE: postgres
+        ports:
+            - "5432:5432"
+    

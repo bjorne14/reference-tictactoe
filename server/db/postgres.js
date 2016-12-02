@@ -6,10 +6,11 @@ module.exports=function(injected){
 // and connection options
 // note: all config is optional and the environment variables
 // will be read if the config is not present
-    var config = injected('config');
+   var config = injected('config');
 
 /*
-    {
+    var config = {
+        host: 'postgres',
         user: 'postgres', //env var: PGUSER
         database: 'postgres', //env var: PGDATABASE
         password: 'mysecretpassword', //env var: PGPASSWORD
@@ -17,8 +18,8 @@ module.exports=function(injected){
         max: 10, // max number of connections in the pool
         idleTimeoutMillis: 30000 // how long a connection is allowed to remain idle before being closed
     };
-*/
 
+*/
 
 
 //this initializes a connection pool

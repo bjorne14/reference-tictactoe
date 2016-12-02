@@ -4,6 +4,7 @@ function serverModule(injected) {
     var PORT = injected('port');
 
     const config = require('./config.js')[ENV];
+    const dbConfig = require('./database.json')[ENV];
 
     const Express = require('express');
     const Session = require('express-session');
@@ -11,9 +12,7 @@ function serverModule(injected) {
     const Path = require('path');
     const SocketIo = require('socket.io');
     const Postgres = require('./db/postgres');
-    const DbConfig = require('./database.json');
 
-    const dbConfig = DbConfig['dev'];
 
     const ChatAppContext = require('./socket-app/server-app-context');
 

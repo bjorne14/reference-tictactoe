@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+# The postgres container might not be ready for accepting connections,
+# so we wait 15s before trying to migrate the production database and running the server.
+sleep 15
+npm run migrateproddb
+node run.js
+
+exit 0

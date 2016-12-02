@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script which builds a project by an predefined "npm build" script, it then creates an docker image which is shipped to DockerHub.com
-# Author: Björn Ingemar Elfström
+# Author: Björn Ingemar Elfström, based on scaffold from teachers in hgop.
 
 USERNAME="bjorne14"
 PROJECT_NAME="tictactoe"
@@ -19,7 +19,7 @@ echo -e "Done..\n"
 
 # Builds the project by the predefined "npm build" script.
 echo "<================ Building ================>"
-npm build
+npm run build
 
 retc=$?
 if [[ $retc != 0 ]]; then 
