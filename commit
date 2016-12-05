@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# A commit script which is executed by the CI server.
+# The workspace at the CI server should be deleted before each build, so make no assumptions about local dependencies however
+# global dependencies/PATH modifications/environment variables should be in place.
+#
+#
+# Author: Björn Ingemar Elfström
+
+npm install
+cd ./client
+npm install
+cd ..
+./build.sh

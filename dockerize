@@ -1,10 +1,24 @@
 #!/bin/bash
-# Script which builds a project by an predefined "npm build" script, it then creates an docker image which is shipped to DockerHub.com
+#
+# Script which builds a project by the build script in the root of the repository.
+# It tags the image with the hash of the commit, if all the steps succeed the commit hash is stored in ./dist/.env
+#
 # Author: Björn Ingemar Elfström, based on scaffold from teachers in hgop.
 
 USERNAME="bjorne14"
 PROJECT_NAME="tictactoe"
+DOCKER_ENV_FILE=".env"
 DOCKER_FILE="."
+
+# Helper function for checking error codes of function calls, on error it reports it and exits the script
+#   Param1: Return value of function call
+#   Param2: Error message to display.
+function checkError {
+    if [[ $1 != 0 ]]; then
+        echo $2
+        exit $1
+    fi
+}
 
 # Initializes the script by getting all necessary repository information
 echo "<============== Initializing ==============>"
@@ -17,37 +31,30 @@ fi
 export GITHUB_URL=$(echo $GIT_URL | rev | cut -c 5-| rev)
 echo -e "Done..\n"
 
-# Builds the project by the predefined "npm build" script.
+# Builds the project by the build script in the root of the repository.
 echo "<================ Building ================>"
-npm run build
-
-retc=$?
-if [[ $retc != 0 ]]; then 
-    echo "Npm build failed with exit code : " $retc
-    exit $retc
-fi
+./build.sh
+checkError $? "Npm build failed with exit code : "$?
 echo -e "Done..\nBuild of application was successful, it can be found in ./build\n"
 
 # Builds the Docker container from the Dockerfile.
 echo "<============ Building Docker =============>"
 docker build -t $USERNAME/$PROJECT_NAME:$GIT_COMMIT $DOCKER_FILE
-
-retc=$?
-if [[ $retc != 0 ]]; then
-    echo "Docker build failed with exit code : " $retc
-    exit $retc
-fi
+checkError $? "Docker build failed with exit code : "$?
 echo -e "\nDone..\nDocker build of container was successful\n"
 
 
-# Pushes the Docker Image to Dockerhub
+# Pushes the new Docker Image to Dockerhub
 echo "<========== Pushing Docker Image ==========>"
 docker login
-docker push $USERNAME/$PROJECT_NAME:$GIT_COMMIT
+checkError $? "Docker login failed with exit code : "$?
 
-retc=$?
-if [[ $retc != 0 ]]; then
-    echo "Docker push failed with exit code : " $retc
-    exit $retc
-fi
+docker push $USERNAME/$PROJECT_NAME:$GIT_COMMIT
+checkError $? "Docker push failed with exit code : "$?
 echo -e "\nDone..\nThe Docker Image: "$USERNAME/$PROJECT_NAME:$GIT_COMMIT " was pushed to your Dockerhub"
+
+# If all the steps succeeded, we save the information about the Docker image we created.
+cat > $DOCKER_ENV_FILE << _EOF_
+VERSION=$GIT_COMMIT
+_EOF_
+

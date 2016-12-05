@@ -4,13 +4,12 @@ services:
     server:
         ports:
             - "8080:8080"
-        build:
-            context: "."
-            dockerfile: 'Dockerfile'
+        image: "bjorne14/tictactoe:${VERSION}"
         environment:
             NODE_ENV: production
         depends_on:
             - db
+        env_file: dist/.env
     db:
         image: postgres:latest
         environment:
