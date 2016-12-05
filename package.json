@@ -4,6 +4,7 @@
   "description": "Base for a simple nodejs server",
   "private": true,
   "main": "run.js",
+  "author": {"name": "Björn Ingemar Elfström"},
   "dependencies": {
     "autoprefixer-core": "^3.1.0",
     "bcrypt-nodejs": "0.0.3",
