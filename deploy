@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Script which deploys the project onto an remote host by pulling the necessary images with docker compose.
+# Params:
+#   Param 1  -  keyfile
+#   Param 2  -  remote-user
+#   Param 3     IP address of remote-host
+#
+# Author: Björn Ingemar Elfström
+#
+if [ $# -ne 3 ]; then
+    echo "ERROR: missing parameters"
+    echo "Usage: ./deploy keyfile remote-user ip"
+    exit
+fi
+scp -i $1 ".env" "docker-compose.yml" $2@$3":."
+ssh -i $1 $2@$3 "docker-compose up --build"
+

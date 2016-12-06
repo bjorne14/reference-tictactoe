@@ -9,7 +9,7 @@ services:
             NODE_ENV: production
         depends_on:
             - db
-        env_file: dist/.env
+        env_file: .env
     db:
         image: postgres:latest
         environment:
