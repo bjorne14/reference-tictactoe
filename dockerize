@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Script which builds a project by the build script in the root of the repository.
-# It tags the image with the hash of the commit, if all the steps succeed the commit hash is stored in ./dist/.env
+# It tags the image with the hash of the commit, if all the steps succeed the commit hash is stored in .env
 #
 # Author: Björn Ingemar Elfström, based on scaffold from teachers in hgop.
 
@@ -46,9 +46,6 @@ echo -e "\nDone..\nDocker build of container was successful\n"
 
 # Pushes the new Docker Image to Dockerhub
 echo "<========== Pushing Docker Image ==========>"
-docker login
-checkError $? "Docker login failed with exit code : "$?
-
 docker push $USERNAME/$PROJECT_NAME:$GIT_COMMIT
 checkError $? "Docker push failed with exit code : "$?
 echo -e "\nDone..\nThe Docker Image: "$USERNAME/$PROJECT_NAME:$GIT_COMMIT " was pushed to your Dockerhub"
