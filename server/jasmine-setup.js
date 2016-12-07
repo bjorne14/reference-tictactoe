@@ -1,6 +1,6 @@
 require('./globals');
 
-
+var JasmineReporters = require('jasmine-reporters');
 var JasmineConsoleReporter = require('jasmine-console-reporter');
 var consoleReporter = new JasmineConsoleReporter({
     colors: 1,           // (0|false)|(1|true)|2
@@ -9,4 +9,11 @@ var consoleReporter = new JasmineConsoleReporter({
     listStyle: 'indent', // "flat"|"indent"
     activity: false
 });
+
+var XMLReporter = new JasmineReporters.JUnitXmlReporter({
+    savePath: ".",
+    consolidateAll: false
+});
+
+jasmine.getEnv().addReporter(XMLReporter);
 jasmine.getEnv().addReporter(consoleReporter);
