@@ -125,9 +125,43 @@ describe('join game command', function () {
 
     });
 
-    it('should emit FullGameJoinAttempted event when game full..implement this', function () {
+    it('should emit FullGameJoinAttempted event when game full', function () {
+        given = [
+            {
+                type: "GameCreated",
+                user: { userName: "PlayerA" },
+                name: "PlayerA's epic tictactoe party",
+                timeStamp: "2030-03-02T13:37:01"
+            },
+            {
+                type: "JoinGame",
+                user: { userName: "PlayerB" },
+                name: "PlayerA's epic tictactoe party",
+                timeStamp: "2030-03-02T13:37:02"
+            },
+            {
+                type: "GameJoined",
+                user: { userName: "PlayerB" },
+                name: "PlayerA's epic tictactoe party",
+                timeStamp: "2030-03-02T13:37:03",
+                side: '0'
+            }          
+        ];
+        when = {
+            type: "JoinGame",
+            user: { userName: "PlayerC" },
+            name: "PlayerA's epic tictactoe party",
+            timeStamp: "2030-03-02T13:37:04"
+        };
+        then = [
+            {
+                type: "FullGameJoinAttempted",
+                user: { userName: "PlayerC" },
+                name: "PlayerA's epic tictactoe party",
+                timeStamp: "2030-03-02T13:37:04"
+            }
+        ];
 
-        expect(true).toBe(false);
     });
 });
 
