@@ -8,7 +8,7 @@ var tictactoe = require('./tictactoe-handler')(inject({
 }));
 
  /* Global testing data for the creation and joining of games since that will be used in multiple tests.
-  * (for clarity they should ALLWAYS be cased in the same manner as the actual commands)
+  * (for clarity they should be cased in the same manner as the actual commands with the exception of prefixes describing when)
   * 
   * PlayerA will allways create the game, PlayerB joins the game successfully.
   */
@@ -42,6 +42,26 @@ var GameJoined = {
     name: "PlayerA's epic tictactoe party",
     timeStamp: "2030-03-02T13:37:00",
     side: 'O' 
+};
+
+var InitPlaceMove = {
+    gameId: "1337",
+    type: "PlaceMove",
+    user: { userName: "PlayerA" },
+    name: "PlayerA's epic tictactoe party",
+    timeStamp: "2031-03-02T13:37:04",
+    side: "X",
+    coordinates: { "x": 0, "y": 0 }
+};
+
+var InitMovePlaced = {
+    gameId: "1337",
+    type: "MovePlaced",
+    user: { userName: "PlayerA" },
+    name: "PlayerA's epic tictactoe party",
+    timeStamp: "2031-03-02T13:37:04",
+    side: "X",
+    coordinates: { "x": 0, "y": 0 }
 };
 
 // Unit test for the creation of TicTacToe games
@@ -136,27 +156,8 @@ describe('PlaceMove command tests', function() {
 
     it('should emit MovePlaced...', function() {
         given = [ CreateGame, GameCreated, JoinGame, GameJoined ];     
-        when = {
-            gameId: "1337",
-            type: "PlaceMove",
-            user: { userName: "PlayerA" },
-            name: "PlayerA's epic tictactoe party",
-            timeStamp: "2031-03-02T13:37:04",
-            side: "X",
-            coordinates: { "x": 0, "y": 0 }
-        };   
-        then = [
-            {
-                gameId: "1337",
-                type: "MovePlaced",
-                user: { userName: "PlayerA" },
-                name: "PlayerA's epic tictactoe party",
-                timeStamp: "2031-03-02T13:37:04",
-                side: "X",
-                coordinates: { "x": 0, "y": 0 }
-            }
-        ];
-
+        when = InitPlaceMove;   
+        then = [ InitMovePlaced ];
     });
 
 
