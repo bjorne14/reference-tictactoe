@@ -16,14 +16,25 @@ module.exports = function (injected) {
             if(event.type === "GameJoined"){
                 isGameFull = true;
             }
+<<<<<<< HEAD
             else if(event.type === "MovePlaced"){
+=======
+            else if(event.type === "PlaceMove"){
+                illegalMove = false;
+>>>>>>> 8eed877... PlaceMove (on an occupied cell) test : PASSED
                 board[event.coordinates.y][event.coordinates.x] = event.side;
             }
         }
 
         function processEvents(history) {
+            console.log(history);
             _.each(history, processEvent);
         }
+
+        function isCellOccupied(x, y){
+            return board[y][x] !== '-';
+        }
+
         function gameFull(){
             return isGameFull;
         }
@@ -31,7 +42,8 @@ module.exports = function (injected) {
 
         return {
             processEvents: processEvents,
-            gameFull: gameFull
+            gameFull: gameFull,
+            isCellOccupied: isCellOccupied
         }
     };
 };

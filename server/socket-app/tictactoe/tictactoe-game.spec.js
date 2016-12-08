@@ -160,7 +160,27 @@ describe('PlaceMove command tests', function() {
         then = [ InitMovePlaced ];
     });
 
-
+    it('should emit IllegalMove (cell already occupied)...', function() {
+        given = [ CreateGame, GameCreated, JoinGame, GameJoined, InitPlaceMove, InitMovePlaced ];
+        when = {
+            gameId: "1337",
+            type: "PlaceMove",
+            user: { userName: "PlayerB" },
+            name: "PlayerA's epic tictactoe party",
+            timeStamp: "2031-03-02T13:37:04",
+            side: "O",
+            coordinates: { "x": 0, "y": 0 }
+        };
+        then = [{
+            gameId: "1337",
+            type: "IllegalMove",
+            user: { userName: "PlayerB" },
+            name: "PlayerA's epic tictactoe party",
+            timeStamp: "2031-03-02T13:37:04",
+            side: "O",
+            coordinates: { "x": 0, "y": 0 } 
+        }];
+    });
 
 });
 

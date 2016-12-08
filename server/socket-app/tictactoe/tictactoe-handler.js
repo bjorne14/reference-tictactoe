@@ -44,6 +44,18 @@ module.exports = function(injected){
                     "PlaceMove": function(cmd){
 
                         // Check here for conditions which prevent command from altering state
+                        if(gameState.isCellOccupied(cmd.coordinates.x, cmd.coordinates.y)){
+                            eventHandler([{
+                                gameId: cmd.gameId,
+                                type: "IllegalMove",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp,
+                                side: cmd.side,
+                                coordinates: cmd.coordinates
+                            }]);
+                            return;                           
+                        }
 
                         // Check here for conditions which may warrant additional events to be emitted (win/draw).
                         
