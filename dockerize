@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script which builds a project by the build script in the root of the repository.
+# Script which builds a project by the build script in the root of the repository and then creates an DockerImage.
 # It tags the image with the hash of the commit, if all the steps succeed the commit hash is stored in .env
 #
 # Author: Björn Ingemar Elfström, based on scaffold from teachers in hgop.

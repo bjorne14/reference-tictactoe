@@ -7,9 +7,14 @@
 #
 # Author: Björn Ingemar Elfström
 
+#Install dependencies for the server.
 npm install
+
+#Install dependencies for the client.
 cd ./client
 npm install
+
+#Go to project root and build and test the project.
 cd ..
 ./build.sh
 npm run commit-test-suite
