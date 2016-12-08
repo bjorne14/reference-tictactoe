@@ -103,6 +103,7 @@ describe('PlaceMove command tests', function() {
         then = [ TestEvents.MovePlaced("PlayerA", "X", {"x": 0, "y": 0}) ];
     });
 
+
     it('should emit IllegalMove (cell already occupied)...', function() {
         given = [ 
             TestEvents.CreateGame(), TestEvents.GameCreated(),
@@ -119,6 +120,24 @@ describe('PlaceMove command tests', function() {
             coordinates: { "x": 0, "y": 0 } 
         }];
     });
+    
+    it('should emit NotYourTurn (Player tries to perform two occuputations in a row)...', function() {
+        given = [ 
+            TestEvents.CreateGame(), TestEvents.GameCreated(),
+            TestEvents.JoinGame("PlayerB"), TestEvents.GameJoined("PlayerB"),
+            TestEvents.PlaceMove("PlayerA", "X", {"x": 0, "y": 0}), TestEvents.MovePlaced("PlayerA", "X", {"x": 0, "y":0}) ];
+        when = TestEvents.PlaceMove("PlayerA", "X", {"x": 1, "y": 1});
+        then = [{
+            gameId: "1337",
+            type: "NotYourTurn",
+            user: { userName: "PlayerA" },
+            name: "PlayerA's epic tictactoe party",
+            timeStamp: "2030-03-02T13:37:00",
+            side: "X",
+            coordinates: { "x": 1, "y": 1 } 
+        }];
+    });
+  
 
 });
 

@@ -2,7 +2,7 @@ var _ = require('lodash');
 
 module.exports = function (injected) {
     var isGameFull = false;
-
+    var lastPlacedPlayer = "none";
     // '-' indicates that the cell is free for occupation
     var board = [
         ['-', '-', '-'],
@@ -16,15 +16,8 @@ module.exports = function (injected) {
             if(event.type === "GameJoined"){
                 isGameFull = true;
             }
-<<<<<<< HEAD
             else if(event.type === "MovePlaced"){
-=======
-            else if(event.type === "PlaceMove"){
-<<<<<<< HEAD
-                illegalMove = false;
->>>>>>> 8eed877... PlaceMove (on an occupied cell) test : PASSED
-=======
->>>>>>> 9533bac... Refactor, moved all testing data into module
+                lastPlacedPlayer = event.side;
                 board[event.coordinates.y][event.coordinates.x] = event.side;
             }
         }
@@ -37,6 +30,10 @@ module.exports = function (injected) {
             return board[y][x] !== '-';
         }
 
+        function notYourTurn(side){
+           return lastPlacedPlayer === side;
+        }
+
         function gameFull(){
             return isGameFull;
         }
@@ -45,7 +42,8 @@ module.exports = function (injected) {
         return {
             processEvents: processEvents,
             gameFull: gameFull,
-            isCellOccupied: isCellOccupied
+            isCellOccupied: isCellOccupied,
+            notYourTurn: notYourTurn
         }
     };
 };

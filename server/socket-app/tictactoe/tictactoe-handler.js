@@ -41,9 +41,20 @@ module.exports = function(injected){
                             side:'O'
                         }]);
                     },
-                    "PlaceMove": function(cmd){
-
+                    "PlaceMove": function(cmd){                      
                         // Check here for conditions which prevent command from altering state
+                        if(gameState.notYourTurn(cmd.side)){
+                            eventHandler([{
+                                gameId: cmd.gameId,
+                                type: "NotYourTurn",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp,
+                                side: cmd.side,
+                                coordinates: cmd.coordinates
+                            }]);
+                            return;                           
+                        }
                         if(gameState.isCellOccupied(cmd.coordinates.x, cmd.coordinates.y)){
                             eventHandler([{
                                 gameId: cmd.gameId,
