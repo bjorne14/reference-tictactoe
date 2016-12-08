@@ -118,4 +118,49 @@ describe('join game command', function () {
     });
 });
 
+describe('PlaceMove command tests', function() {
+    var given, when, then;
+
+    beforeEach(function () {
+        given = undefined;
+        when = undefined;
+        then = undefined;
+    });
+
+    afterEach(function () {
+        tictactoe(given).executeCommand(when, function (actualEvents) {
+            should(JSON.stringify(actualEvents)).be.exactly(JSON.stringify(then));
+        });
+    });
+
+
+    it('should emit MovePlaced...', function() {
+        given = [ CreateGame, GameCreated, JoinGame, GameJoined ];     
+        when = {
+            gameId: "1337",
+            type: "PlaceMove",
+            user: { userName: "PlayerA" },
+            name: "PlayerA's epic tictactoe party",
+            timeStamp: "2031-03-02T13:37:04",
+            side: "X",
+            coordinates: { "x": 0, "y": 0 }
+        };   
+        then = [
+            {
+                gameId: "1337",
+                type: "MovePlaced",
+                user: { userName: "PlayerA" },
+                name: "PlayerA's epic tictactoe party",
+                timeStamp: "2031-03-02T13:37:04",
+                side: "X",
+                coordinates: { "x": 0, "y": 0 }
+            }
+        ];
+
+    });
+
+
+
+});
+
 

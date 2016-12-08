@@ -5,7 +5,6 @@ module.exports = function(injected){
     return function(history){
 
         var gameState = TictactoeState(history);
-
         return {
             executeCommand: function(cmd, eventHandler){
 
@@ -46,10 +45,19 @@ module.exports = function(injected){
 
                         // Check here for conditions which prevent command from altering state
 
-                        gameState.processEvents(events);
+                        // Check here for conditions which may warrant additional events to be emitted (win/draw).
+                        
+                        //Else we just do MovePlaced
+                        eventHandler([{
+                            gameId: cmd.gameId,
+                            type: "MovePlaced",
+                            user: cmd.user,
+                            name: cmd.name,
+                            timeStamp: cmd.timeStamp,
+                            side: cmd.side,
+                            coordinates: cmd.coordinates
+                        }]);
 
-                        // Check here for conditions which may warrant additional events to be emitted.
-                        eventHandler(events);
                     }
                 };
 
