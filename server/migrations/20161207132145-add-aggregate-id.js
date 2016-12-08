@@ -16,7 +16,6 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db, callback) {
   db.addColumn('eventlog', 'aggregate_id', {type: 'string'},callback);
-  db.addColumn('commandlog', 'aggregate_id', {type: 'string'},callback);
 };
 
 exports.down = function(db) {
