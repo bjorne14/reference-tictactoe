@@ -20,14 +20,16 @@ module.exports = function (injected) {
             else if(event.type === "MovePlaced"){
 =======
             else if(event.type === "PlaceMove"){
+<<<<<<< HEAD
                 illegalMove = false;
 >>>>>>> 8eed877... PlaceMove (on an occupied cell) test : PASSED
+=======
+>>>>>>> 9533bac... Refactor, moved all testing data into module
                 board[event.coordinates.y][event.coordinates.x] = event.side;
             }
         }
 
         function processEvents(history) {
-            console.log(history);
             _.each(history, processEvent);
         }
 
