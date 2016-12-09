@@ -34,6 +34,18 @@ module.exports = function (injected) {
            return lastPlacedPlayer === side;
         }
 
+        function gameWon(side, x, y){
+            // Occupy the cell for the player.
+            board[y][x] = side;
+
+            // Check if player has occupied 3 cells along the diagonal
+            if((board[0][0] == side && board[1][1] == side && board[2][2] == side) ||
+                    (board[2][0] == side &&  board[1][1] == side && board[0][2] == side)){
+                return true;
+            }
+            return false;
+        }
+
         function gameFull(){
             return isGameFull;
         }
@@ -43,7 +55,8 @@ module.exports = function (injected) {
             processEvents: processEvents,
             gameFull: gameFull,
             isCellOccupied: isCellOccupied,
-            notYourTurn: notYourTurn
+            notYourTurn: notYourTurn,
+            gameWon: gameWon
         }
     };
 };

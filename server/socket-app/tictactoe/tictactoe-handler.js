@@ -69,7 +69,28 @@ module.exports = function(injected){
                         }
 
                         // Check here for conditions which may warrant additional events to be emitted (win/draw).
-                        
+                        if(gameState.gameWon(cmd.side, cmd.coordinates.x, cmd.coordinates.y)){
+                            eventHandler([{
+                                gameId: cmd.gameId,
+                                type: "MovePlaced",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp,
+                                side: cmd.side,
+                                coordinates: cmd.coordinates
+                            },
+                            {
+                                gameId: cmd.gameId,
+                                type: "GameWon",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp,
+                                side: cmd.side
+                            }]);                  
+                            return;
+                        }
+
+
                         //Else we just do MovePlaced
                         eventHandler([{
                             gameId: cmd.gameId,

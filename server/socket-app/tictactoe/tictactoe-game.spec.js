@@ -137,7 +137,21 @@ describe('PlaceMove command tests', function() {
             coordinates: { "x": 1, "y": 1 } 
         }];
     });
-  
+    it('should emit GameWon(3 cells in diagonal occupied)...', function() {
+         given = [ 
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB"),
+            TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 0}), TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 0}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 1, "y": 0}), TestEvents.movePlaced("PlayerA", "O", {"x": 1, "y": 0}),
+            TestEvents.placeMove("PlayerA", "X", {"x": 2, "y": 0}), TestEvents.movePlaced("PlayerA", "X", {"x": 2, "y": 0}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 2, "y": 1}), TestEvents.movePlaced("PlayerB", "O", {"x": 2, "y": 1}),
+            TestEvents.placeMove("PlayerA", "X", {"x": 1, "y": 1}), TestEvents.movePlaced("PlayerA", "X", {"x": 1, "y": 1}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 2, "y": 2}), TestEvents.movePlaced("PlayerB", "O", {"x": 2, "y": 2}),
+         ];
+         when = TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 2});
+         then = [ TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 2}), TestEvents.gameOver("PlayerA", "X", "GameWon") ];            
+    });  
 
 });
+
 

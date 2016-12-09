@@ -61,7 +61,7 @@ function placeMove(_username, _side, _coordinates){
 
 function movePlaced(_username, _side, _coordinates) {
     return {
-        gameId: "1337",
+        gameId: GAME_ID,
         type: "MovePlaced",
         user: { userName: _username },
         name: GAME_NAME,
@@ -70,11 +70,24 @@ function movePlaced(_username, _side, _coordinates) {
         coordinates: _coordinates
     };
 }
+
+function gameOver(_username, _side, _endState) {
+     return {
+        gameId: GAME_ID,
+        type: _endState,
+        user: { userName: _username },
+        name: GAME_NAME,
+        timeStamp: TIME_STAMP,
+        side: _side,
+    };
+   
+}
 module.exports = {
     createGame: createGame,
     gameCreated: gameCreated,
     joinGame: joinGame,
     gameJoined: gameJoined,
     placeMove: placeMove,
-    movePlaced: movePlaced
+    movePlaced: movePlaced,
+    gameOver: gameOver
 }
