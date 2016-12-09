@@ -57,6 +57,9 @@ module.exports = function (injected) {
                 if(board[i][0] == side && board[i][1] == side && board[i][2] == side){
                     return true;
                 }
+                if(board[0][i] == side && board[1][i] == side && board[2][i] == side){
+                    return true;
+                }
             }
 
             return false;
