@@ -120,7 +120,26 @@ describe('PlaceMove command tests', function() {
             coordinates: { "x": 0, "y": 0 } 
         }];
     });
-    
+
+    it('should emit IllegalMove (cell outside board)...', function() {
+        given = [ 
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB")
+        ];
+        when = TestEvents.placeMove("PlayerA", "X", {"x": -1, "y": -1});
+        then = [{
+            gameId: "1337",
+            type: "IllegalMove",
+            user: { userName: "PlayerA" },
+            name: "PlayerA's epic tictactoe party",
+            timeStamp: "2030-03-02T13:37:00",
+            side: "X",
+            coordinates: { "x": -1, "y": -1 } 
+        }];
+ 
+
+    });   
+
     it('should emit NotYourTurn (Player tries to perform two occuputations in a row)...', function() {
         given = [ 
             TestEvents.createGame(), TestEvents.gameCreated(),

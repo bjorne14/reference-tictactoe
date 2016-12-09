@@ -38,6 +38,10 @@ module.exports = function (injected) {
             clear();
            _.each(history, processEvent);
         }
+        
+        function isOutOfBounds(x, y){
+            return ((x < 0 || x > 2) || (y < 0 || y > 2));
+        }
 
         function isCellOccupied(x, y){
             return board[y][x] !== '-';
@@ -85,6 +89,7 @@ module.exports = function (injected) {
             processEvents: processEvents,
             gameFull: gameFull,
             isCellOccupied: isCellOccupied,
+            isOutOfBounds: isOutOfBounds,
             notYourTurn: notYourTurn,
             gameWon: gameWon,
             gameDraw: gameDraw
