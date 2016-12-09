@@ -11,6 +11,15 @@ module.exports = function (injected) {
     ];
 
     return function (history) {
+        function clear(){
+            isGameFull = false;
+            lastPlacedPlayer = "none";
+            for(i = 0; i < 3; i++){
+                for(j = 0; j < 3; j++){
+                    board[i][j] = '-';
+                }                   
+            }
+        }
 
         function processEvent(event) {
             if(event.type === "GameJoined"){
@@ -23,7 +32,8 @@ module.exports = function (injected) {
         }
 
         function processEvents(history) {
-            _.each(history, processEvent);
+            clear();
+           _.each(history, processEvent);
         }
 
         function isCellOccupied(x, y){
@@ -43,6 +53,12 @@ module.exports = function (injected) {
                     (board[2][0] == side &&  board[1][1] == side && board[0][2] == side)){
                 return true;
             }
+            for(i = 0; i < 3; i++){
+                if(board[i][0] == side && board[i][1] == side && board[i][2] == side){
+                    return true;
+                }
+            }
+
             return false;
         }
 

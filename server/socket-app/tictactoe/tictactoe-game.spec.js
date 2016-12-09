@@ -150,7 +150,20 @@ describe('PlaceMove command tests', function() {
          ];
          when = TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 2});
          then = [ TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 2}), TestEvents.gameOver("PlayerA", "X", "GameWon") ];            
-    });  
+    }); 
+
+    it('shoud emit GameOne(3 cells in horizontal occupied)...', function() {
+         given = [ 
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB"),
+            TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 0 }), TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 0}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 0, "y": 1 }), TestEvents.movePlaced("PlayerB", "O", {"x": 0, "y": 1}),
+            TestEvents.placeMove("PlayerA", "X", {"x": 1, "y": 0 }), TestEvents.movePlaced("PlayerA", "X", {"x": 1, "y": 0}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 1, "y": 1 }), TestEvents.movePlaced("PlayerB", "O", {"x": 1, "y": 1}),
+         ];
+         when = TestEvents.placeMove("PlayerA", "X", {"x": 2, "y": 0});
+         then = [ TestEvents.movePlaced("PlayerA", "X", {"x": 2, "y": 0}), TestEvents.gameOver("PlayerA", "X", "GameWon") ];            
+    }); 
 
 });
 
