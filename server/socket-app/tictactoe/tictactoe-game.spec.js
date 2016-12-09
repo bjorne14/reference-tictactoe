@@ -179,6 +179,24 @@ describe('PlaceMove command tests', function() {
 
     });
 
+    it('should emit GameDraw...)', function() {
+          given = [ 
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB"),
+            TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 0 }), TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 0}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 1, "y": 0 }), TestEvents.movePlaced("PlayerB", "O", {"x": 1, "y": 0}),
+            TestEvents.placeMove("PlayerA", "X", {"x": 2, "y": 0 }), TestEvents.movePlaced("PlayerA", "X", {"x": 2, "y": 0}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 1, "y": 1 }), TestEvents.movePlaced("PlayerB", "O", {"x": 1, "y": 1}),
+            TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 1 }), TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 1}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 0, "y": 2 }), TestEvents.movePlaced("PlayerB", "O", {"x": 0, "y": 2}), 
+            TestEvents.placeMove("PlayerA", "X", {"x": 1, "y": 2 }), TestEvents.movePlaced("PlayerA", "X", {"x": 1, "y": 2}),
+            TestEvents.placeMove("PlayerB", "O", {"x": 2, "y": 1 }), TestEvents.movePlaced("PlayerB", "O", {"x": 2, "y": 1}),
+         ];
+        when = TestEvents.placeMove("PlayerA", "X", {"x": 2, "y": 2 });
+        then = [ TestEvents.movePlaced("PlayerA", "X", {"x": 2, "y": 2}), TestEvents.gameOver("PlayerA", "X", "GameDraw") ];
+
+    });
+
 });
 
 

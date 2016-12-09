@@ -78,6 +78,18 @@ module.exports = function(injected){
                             coordinates: cmd.coordinates
                         };
                         // Check here for conditions which may warrant additional events to be emitted (win/draw).
+                        if(gameState.gameDraw(cmd.side, cmd.coordinates.x, cmd.coordinates.y)){
+                            eventHandler([ placeMent ,{
+                                gameId: cmd.gameId,
+                                type: "GameDraw",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp,
+                                side: cmd.side
+                            }]);                  
+                            return;
+                        }
+
                         if(gameState.gameWon(cmd.side, cmd.coordinates.x, cmd.coordinates.y)){
                             eventHandler([ placeMent ,{
                                 gameId: cmd.gameId,
