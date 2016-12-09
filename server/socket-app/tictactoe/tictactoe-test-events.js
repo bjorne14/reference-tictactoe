@@ -6,7 +6,7 @@ const GAME_ID = "1337";
 const TIME_STAMP = "2030-03-02T13:37:00";
 const GAME_NAME = "PlayerA's epic tictactoe party";
 
-function CreateGame() {
+function createGame() {
     return {
         gameId: GAME_ID,
         type: "CreateGame",
@@ -16,7 +16,7 @@ function CreateGame() {
 }
 
 
-function GameCreated() {
+function gameCreated() {
     return {
         gameId: GAME_ID,
         type: "GameCreated",
@@ -26,7 +26,7 @@ function GameCreated() {
     };
 }
 
-function JoinGame(_username) {
+function joinGame(_username) {
     return {
         gameId: GAME_ID,
         type: "JoinGame",
@@ -36,7 +36,7 @@ function JoinGame(_username) {
     };
 }
 
-function GameJoined(_username) {
+function gameJoined(_username) {
     return {
         gameId: GAME_ID,
         type: "GameJoined",
@@ -47,7 +47,7 @@ function GameJoined(_username) {
     };
 }
 
-function PlaceMove(_username, _side, _coordinates){
+function placeMove(_username, _side, _coordinates){
     return {
         gameId: GAME_ID,
         type: "PlaceMove",
@@ -59,7 +59,7 @@ function PlaceMove(_username, _side, _coordinates){
     };
 }
 
-function MovePlaced(_username, _side, _coordinates) {
+function movePlaced(_username, _side, _coordinates) {
     return {
         gameId: "1337",
         type: "MovePlaced",
@@ -71,10 +71,10 @@ function MovePlaced(_username, _side, _coordinates) {
     };
 }
 module.exports = {
-    CreateGame: CreateGame,
-    GameCreated: GameCreated,
-    JoinGame: JoinGame,
-    GameJoined: GameJoined,
-    PlaceMove: PlaceMove,
-    MovePlaced: MovePlaced
+    createGame: createGame,
+    gameCreated: gameCreated,
+    joinGame: joinGame,
+    gameJoined: gameJoined,
+    placeMove: placeMove,
+    movePlaced: movePlaced
 }

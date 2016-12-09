@@ -28,8 +28,8 @@ describe('create game command', function() {
 
     it('should emit game created event', function(){
         given = [];
-        when = TestEvents.CreateGame();
-        then = [ TestEvents.GameCreated() ];
+        when = TestEvents.createGame();
+        then = [ TestEvents.gameCreated() ];
     })
 });
 
@@ -54,17 +54,17 @@ describe('join game command', function () {
 
 
     it('should emit game joined event...', function () {
-        given = [ TestEvents.CreateGame(), TestEvents.GameCreated() ];
-        when = TestEvents.JoinGame("PlayerB");
-        then = [ TestEvents.GameJoined("PlayerB") ];
+        given = [ TestEvents.createGame(), TestEvents.gameCreated() ];
+        when = TestEvents.joinGame("PlayerB");
+        then = [ TestEvents.gameJoined("PlayerB") ];
     });
 
     it('should emit FullGameJoinAttempted event when game full', function () {
         given = [ 
-            TestEvents.CreateGame(), TestEvents.GameCreated(),    
-            TestEvents.JoinGame("PlayerB"), TestEvents.GameJoined("PlayerB") 
+            TestEvents.createGame(), TestEvents.gameCreated(),    
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB") 
         ];
-        when = TestEvents.JoinGame("PlayerC");
+        when = TestEvents.joinGame("PlayerC");
         then = [
             {
                 gameId: "1337",
@@ -96,20 +96,20 @@ describe('PlaceMove command tests', function() {
 
     it('should emit MovePlaced...', function() {
         given = [
-            TestEvents.CreateGame(), TestEvents.GameCreated(),
-            TestEvents.JoinGame("PlayerB"), TestEvents.GameJoined("PlayerB") 
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB") 
         ];     
-        when = TestEvents.PlaceMove("PlayerA", "X", {"x": 0, "y": 0});
-        then = [ TestEvents.MovePlaced("PlayerA", "X", {"x": 0, "y": 0}) ];
+        when = TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 0});
+        then = [ TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y": 0}) ];
     });
 
 
     it('should emit IllegalMove (cell already occupied)...', function() {
         given = [ 
-            TestEvents.CreateGame(), TestEvents.GameCreated(),
-            TestEvents.JoinGame("PlayerB"), TestEvents.GameJoined("PlayerB"),
-            TestEvents.PlaceMove("PlayerA", "X", {"x": 0, "y": 0}), TestEvents.MovePlaced("PlayerA", "X", {"x": 0, "y":0}) ];
-        when = TestEvents.PlaceMove("PlayerB", "O", {"x": 0, "y": 0});
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB"),
+            TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 0}), TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y":0}) ];
+        when = TestEvents.placeMove("PlayerB", "O", {"x": 0, "y": 0});
         then = [{
             gameId: "1337",
             type: "IllegalMove",
@@ -123,10 +123,10 @@ describe('PlaceMove command tests', function() {
     
     it('should emit NotYourTurn (Player tries to perform two occuputations in a row)...', function() {
         given = [ 
-            TestEvents.CreateGame(), TestEvents.GameCreated(),
-            TestEvents.JoinGame("PlayerB"), TestEvents.GameJoined("PlayerB"),
-            TestEvents.PlaceMove("PlayerA", "X", {"x": 0, "y": 0}), TestEvents.MovePlaced("PlayerA", "X", {"x": 0, "y":0}) ];
-        when = TestEvents.PlaceMove("PlayerA", "X", {"x": 1, "y": 1});
+            TestEvents.createGame(), TestEvents.gameCreated(),
+            TestEvents.joinGame("PlayerB"), TestEvents.gameJoined("PlayerB"),
+            TestEvents.placeMove("PlayerA", "X", {"x": 0, "y": 0}), TestEvents.movePlaced("PlayerA", "X", {"x": 0, "y":0}) ];
+        when = TestEvents.placeMove("PlayerA", "X", {"x": 1, "y": 1});
         then = [{
             gameId: "1337",
             type: "NotYourTurn",
