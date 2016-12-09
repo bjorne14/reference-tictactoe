@@ -55,8 +55,7 @@ module.exports = function(injected){
                             }]);
                             return;                           
                         }
-                        if(gameState.isOutOfBounds(cmd.coordinates.x, cmd.coordinates.y) || 
-                                gameState.isCellOccupied(cmd.coordinates.x, cmd.coordinates.y)){
+                        if(gameState.isOutOfBounds(cmd.coordinates) || gameState.isCellOccupied(cmd.coordinates)){
                             eventHandler([{
                                 gameId: cmd.gameId,
                                 type: "IllegalMove",
@@ -79,7 +78,7 @@ module.exports = function(injected){
                             coordinates: cmd.coordinates
                         };
                         // Check here for conditions which may warrant additional events to be emitted (win/draw).
-                        if(gameState.gameDraw(cmd.side, cmd.coordinates.x, cmd.coordinates.y)){
+                        if(gameState.gameDraw(cmd.side, cmd.coordinates)){
                             eventHandler([ placeMent ,{
                                 gameId: cmd.gameId,
                                 type: "GameDraw",
@@ -91,7 +90,7 @@ module.exports = function(injected){
                             return;
                         }
 
-                        if(gameState.gameWon(cmd.side, cmd.coordinates.x, cmd.coordinates.y)){
+                        if(gameState.gameWon(cmd.side, cmd.coordinates)){
                             eventHandler([ placeMent ,{
                                 gameId: cmd.gameId,
                                 type: "GameWon",

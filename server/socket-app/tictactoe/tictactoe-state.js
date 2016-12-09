@@ -39,28 +39,28 @@ module.exports = function (injected) {
            _.each(history, processEvent);
         }
         
-        function isOutOfBounds(x, y){
-            return ((x < 0 || x > 2) || (y < 0 || y > 2));
+        function isOutOfBounds(cords){
+            return ((cords.x < 0 || cords.x > 2) || (cords.y < 0 || cords.y > 2));
         }
 
-        function isCellOccupied(x, y){
-            return board[y][x] !== '-';
+        function isCellOccupied(cords){
+            return board[cords.y][cords.x] !== '-';
         }
 
         function notYourTurn(side){
            return lastPlacedPlayer === side;
         }
 
-        function gameDraw(side, x, y){
-            if(gameWon(side, x, y)){
+        function gameDraw(side, cords){
+            if(gameWon(side, cords)){
                 return false;
             }
             return occupiedCells === 9;
         }
 
-        function gameWon(side, x, y){
+        function gameWon(side, cords){
             // Occupy the cell for the player.
-            board[y][x] = side;
+            board[cords.y][cords.x] = side;
             occupiedCells++;
 
             // Check if player has occupied 3 cells along the diagonal
