@@ -67,19 +67,19 @@ module.exports = function(injected){
                             }]);
                             return;                           
                         }
-
+                        
+                        var placeMent = {
+                            gameId: cmd.gameId,
+                            type: "MovePlaced",
+                            user: cmd.user,
+                            name: cmd.name,
+                            timeStamp: cmd.timeStamp,
+                            side: cmd.side,
+                            coordinates: cmd.coordinates
+                        };
                         // Check here for conditions which may warrant additional events to be emitted (win/draw).
                         if(gameState.gameWon(cmd.side, cmd.coordinates.x, cmd.coordinates.y)){
-                            eventHandler([{
-                                gameId: cmd.gameId,
-                                type: "MovePlaced",
-                                user: cmd.user,
-                                name: cmd.name,
-                                timeStamp: cmd.timeStamp,
-                                side: cmd.side,
-                                coordinates: cmd.coordinates
-                            },
-                            {
+                            eventHandler([ placeMent ,{
                                 gameId: cmd.gameId,
                                 type: "GameWon",
                                 user: cmd.user,
@@ -92,19 +92,10 @@ module.exports = function(injected){
 
 
                         //Else we just do MovePlaced
-                        eventHandler([{
-                            gameId: cmd.gameId,
-                            type: "MovePlaced",
-                            user: cmd.user,
-                            name: cmd.name,
-                            timeStamp: cmd.timeStamp,
-                            side: cmd.side,
-                            coordinates: cmd.coordinates
-                        }]);
-
+                        eventHandler([ placeMent ]);
+                    
                     }
-                };
-
+                }
                 if(!cmdHandlers[cmd.type]){
                     throw new Error("I do not handle command of type " + cmd.type)
                 }
