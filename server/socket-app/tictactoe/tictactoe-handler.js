@@ -1,4 +1,33 @@
-         timeStamp: cmd.timeStamp
+
+module.exports = function(injected){
+    var TictactoeState = injected('TictactoeState');
+
+    return function(history){
+
+        var gameState = TictactoeState(history);
+        return {
+            executeCommand: function(cmd, eventHandler){
+
+                var cmdHandlers = {
+                    "CreateGame": function (cmd) {
+                        eventHandler([{
+                            gameId: cmd.gameId,
+                            type: "GameCreated",
+                            user: cmd.user,
+                            name: cmd.name,
+                            timeStamp: cmd.timeStamp,
+                            side:'X'
+                        }]);
+
+                    },
+                    "JoinGame": function (cmd) {
+                        if(gameState.gameFull()){
+                            eventHandler( [{
+                                gameId: cmd.gameId,
+                                type: "FullGameJoinAttempted",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp
                             }]);
                             return;
                         }
@@ -72,6 +101,8 @@
                             }]);                  
                             return;
                         }
+
+
                         //Else we just do MovePlaced
                         eventHandler([ placeMent ]);
                     
@@ -85,4 +116,3 @@
         }
     }
 };
-
