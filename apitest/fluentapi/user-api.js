@@ -7,6 +7,20 @@ module.exports=function(injected){
     var connectCount =0;
 
     function userAPI(){
+        // object containing information about command for the game(we override the properties as we gather information)
+        var game = { 
+            commandId: "dummy value",        
+            gameId: "dummy value",
+            type: "dummy value",
+            user: {userName: generateUUID()},
+            name: "a cool game",
+            timeStamp: "2030-03-02T13:37:00",
+            side: "the darkside..",
+            coordinates: "dummy"
+        };
+ 
+        
+        // Queue of events of which we wait on
         var waitingFor=[];
         var commandId=0;
 
@@ -17,6 +31,72 @@ module.exports=function(injected){
 
         connectCount++;
         const me = {
+            getGame:()=>{
+                return game;
+            },
+            expectGameWon:()=>{
+                waitingFor.push("expectGameWon");
+                routingContext.eventRouter.on("GameWon", function(gameEvent){
+                    expect(gameEvent.side).not.toBeUndefined();
+                    if(game.gameId === gameEvent.gameId && game.side === gameEvent.side){
+                        waitingFor.pop();
+                    }
+                });
+                return me;
+            },            
+            expectMoveMade:()=>{
+                waitingFor.push("expectMoveMade");
+                routingContext.eventRouter.on("MovePlaced", function(gameEvent){
+                    expect(gameEvent.side).not.toBeUndefined();
+                    if(game.gameId === gameEvent.gameId && game.side === gameEvent.side){
+                        waitingFor.pop();
+                    }
+                });
+                return me;
+            },
+            placeMove:(x, y)=>{
+                game.type = "PlaceMove";
+                game.commandId = generateUUID();
+                game.coordinates = {"x": x, "y": y};
+                routingContext.commandRouter.routeMessage(game);
+                return me;
+            },
+            expectGameJoined:()=>{
+                waitingFor.push("expectGameJoined");
+                routingContext.eventRouter.on("GameJoined", function(gameEvent){                  
+                    if(game.gameId === gameEvent.gameId){
+                        expect(gameEvent.side).toBe('O');
+                        game.side = "O";
+                        waitingFor.pop();
+                    }
+                });
+                return me;
+            },
+            joinGame:(gameId)=>{
+                game.gameId = gameId;
+                game.commandId = generateUUID();
+                game.type = "JoinGame";
+                routingContext.commandRouter.routeMessage(game);
+                return me;
+            },
+            expectGameCreated:()=>{
+                waitingFor.push("expectGameCreated");
+                routingContext.eventRouter.on('GameCreated', function(gameEvent){
+                    if(gameEvent.gameId === game.gameId){
+                        expect(gameEvent.side).toBe('X');
+                        game.side = "X";
+                        waitingFor.pop();
+                    }
+                });
+                return me;
+            },
+            createGame:()=>{
+                game.gameId = generateUUID();
+                game.commandId = generateUUID();
+                game.type = "CreateGame";
+                routingContext.commandRouter.routeMessage(game);
+                return me;
+            },
             expectUserAck:(cb)=>{
                 waitingFor.push("expectUserAck");
                 routingContext.socket.on('userAcknowledged', function(ackMessage){
