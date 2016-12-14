@@ -62,10 +62,11 @@ reuse () {
         if [ $2 = "RR" ]; then
             echo "Rebooting host instance this might take a while.."
             aws ec2 reboot-instances --instance-ids $ID --region $REGION
-            status="unknown"
-            while [ ! "${status}" == "ok" ]
+            status=5
+            while [ "${status}" -ne 0 ]
             do
-                status=$(ssh -i "${SSH_KEY_FOLDER}${SEC_GROUP}.pem" "-o StrictHostKeyChecking=no" "-o BatchMode=yes" "-o ConnectTimeout=5" $USR@${IP} echo ok 2>&1)
+                status=$(ssh -i "${SSH_KEY_FOLDER}${SEC_GROUP}.pem" -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=5 ${USR}@${IP} echo $? 2>&1)
+                
                 sleep 2                
             done
         fi
