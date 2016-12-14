@@ -46,32 +46,41 @@ reuse () {
 
     for file in $EC2_HOSTS_FOLDER/$1*;
     do
+        # Get necessary information about host instance
         ID=$(cat "$file" | grep "INSTANCE_ID" | cut -d= -f2)
         USR=$(cat "$file" | grep "REMOTE_USER" | cut -d= -f2)
         REGION=$(cat "$file" | grep "REGION" | cut -d= -f2)
         OS=$(cat "$file" | grep "OS" | cut -d= -f2)
         SEC_GROUP=$(cat "$file" | grep "SEC_GROUP" | cut -d= -f2)
-
-        #Get ip of the running instance.
         IP=$(aws ec2 describe-instances --instance-ids "$ID" --region "$REGION" | grep "PublicIpAddress" | cut -d\" -f4)
-        #Do some sanity checking here..
 
-        #ERROR CHECKING (lets assume for now that ensuring its correct is manual, will fix)..
+        # TODO: ERROR CHECKING (lets assume for now that ensuring its correct is manual, will fix)..
 
         echo "Found available host for STAGE "$1         
         if [ $2 = "RR" ]; then
             echo "Rebooting host instance this might take a while.."
             aws ec2 reboot-instances --instance-ids $ID --region $REGION
-            status=5
-            while [ "${status}" -ne 0 ]
+            
+            # Not sure why, but jenkins seems to get the error code even with the redirect?
+            # and if we redirect the error code we get some weird behaviour on connectimeout(probably some error on my behalf?)
+            # So we tell the shell to not report any errors with the ssh command...
+            set +e
+
+            # We need to sleep here in order for the remote server to actually have time to shutdown before doing our first ssh
+            sleep 30
+
+            status='unknown'
+            while [ ! "${status}" == 'ok' ]
             do
-                status=$(ssh -i "${SSH_KEY_FOLDER}${SEC_GROUP}.pem" -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=5 ${USR}@${IP} echo $? 2>&1)
+                status=$(ssh -i "${SSH_KEY_FOLDER}${SEC_GROUP}.pem" -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=5 ${USR}@${IP} echo 'ok' 2>&1)
                 
                 sleep 2                
             done
+            # Now we need to turn on error again, since if the will loop succeeds we shouldn't get any errors.
+            set -e
         fi
 
-         #Get ip of the running instance (it might have changed if we rebooted)
+        #Get ip of the running instance (it might have changed if we rebooted)
         IP=$(aws ec2 describe-instances --instance-ids "$ID" --region "$REGION" | grep "PublicIpAddress" | cut -d\" -f4)
 
         export $1"_IP"=$IP
