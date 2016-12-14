@@ -1,0 +1,103 @@
+#!/bin/bash
+#  
+# Script which provisions an host instance for an stage.
+# To reuse an existing host instance, it will go through the host folder (if existing).
+# The script will set the environment variables STAGE_IP/USER/SEC_GROUP in this shell, so if you wish to use those
+# remember to use sourcing (i.e . ./provision STAGE STATE)
+#
+# Information about the host found will be printed out "pretty" to STDOUT in the following format:
+# HOST:
+# IP: ip-address
+# USER: remote-username
+# SEC_GROUP: sec-group-name
+# OS: os-of-remote-host
+# REGION: region-of-instance
+#
+# This is suitable to log information about instances used for stages or errors with host instances/config, this could 
+# also be used to retrieve the information from another script by using "grep "field" | cut -d: -f2"
+#
+# Author: Björn Ingemar Elfström
+# TODO: Implement creation of host on option set/fall back on reuse behaviour, remove configuration files for
+# hosts that are no longer online (or malformed)
+
+# Config file for the host that gets provisioned, it's needed so that acceptance/capacity test's know which host to test against.
+PROVISIONED_HOST_CONFIG=./client/remotehost.json
+
+# Folder of config files for available hosts.
+EC2_HOSTS_FOLDER=./hosts
+
+# Relative folder where ssh keys should be stored (If you wish to run any tests except unit-tets locally remember to retrieve keys).
+SSH_KEY_FOLDER=../../../sshkeys/
+
+function usage {
+    echo "Usage ./provision STAGE STATE"
+    echo "STAGE     - Stage that host will be used for?"
+    echo "      ACC - Acceptance stage"
+    echo "      CAP - Capacity stage"
+    echo ""
+    echo "STATE     - How should the host be provisioned?"
+    echo "      RR  - Reboot and Reuse available host for stage if available"
+    echo "      R   - Reuse available host for stage if available"
+    echo ""
+    exit 1
+}
+
+function reuse {     
+
+    for file in $EC2_HOSTS_FOLDER/$1*;
+    do
+        ID=$(cat "$file" | grep "INSTANCE_ID" | cut -d= -f2)
+        USR=$(cat "$file" | grep "REMOTE_USER" | cut -d= -f2)
+        REGION=$(cat "$file" | grep "REGION" | cut -d= -f2)
+        OS=$(cat "$file" | grep "OS" | cut -d= -f2)
+        SEC_GROUP=$(cat "$file" | grep "SEC_GROUP" | cut -d= -f2)
+
+        #Get ip of the running instance.
+        IP=$(aws ec2 describe-instances --instance-ids "$ID" --region "$REGION" | grep "PublicIpAddress" | cut -d\" -f4)
+        #Do some sanity checking here..
+
+        #ERROR CHECKING (lets assume for now that ensuring its correct is manual, will fix)..
+
+        echo "Found available host for STAGE "$1         
+        if [ $2 == "RR" ]; then
+            echo "Rebooting host instance this might take a while.."
+            aws ec2 reboot-instances --instance-ids $ID --region $REGION
+            status="unknown"
+            while [ ! "${status}" == "ok" ]
+            do
+                status=$(ssh -i "${SSH_KEY_FOLDER}${SEC_GROUP}.pem" "-o StrictHostKeyChecking=no" "-o BatchMode=yes" "-o ConnectTimeout=5" $USR@${IP} echo ok 2>&1)
+                sleep 2                
+            done
+        fi
+
+         #Get ip of the running instance (it might have changed if we rebooted)
+        IP=$(aws ec2 describe-instances --instance-ids "$ID" --region "$REGION" | grep "PublicIpAddress" | cut -d\" -f4)
+
+        export $1"_IP"=$IP
+        export $1"_USER"=$USR
+        export $1"_SEC_GROUP"=$SEC_GROUP
+
+        echo "HOST:"
+        echo "IP: "$IP
+        echo "USER: "$USR
+        echo "SEC_GROUP: "$SEC_GROUP
+        echo "OS: "$OS
+        echo "REGION: "$REGION
+        echo "Done.."
+        echo '{ "ip" : "'$IP'" }' > $PROVISIONED_HOST_CONFIG
+        break
+    done 
+}
+
+
+if [ $# -ne 2 ]; then
+    usage
+fi
+
+if [ ! -d $EC2_HOSTS_FOLDER ]; then
+    mkdir $EC2_HOSTS_FOLDER
+fi
+
+if [[ $2 == R* ]]; then
+    reuse $1 $2
+fi

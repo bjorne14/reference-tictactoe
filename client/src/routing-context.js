@@ -1,6 +1,7 @@
 const inject = require('./common/framework/inject');
 const WebSocketModule =  require('./io/webSocket');
 const MessageRouter = require('./common/framework/message-router');
+const RemoteHost = require('../remotehost.json');
 
 const IncomingSocketMessageDispatcherModule = require('./common/framework/incoming-socket-message-dispatcher');
 const OutgoingSocketIoMessagePortModule = require('./common/framework/outgoing-socket-io-message-port');
@@ -15,7 +16,7 @@ function routingContext(injected){
     const environment = injected('env');
     var socketURI;
     if(environment==='development' || environment==='test'){
-        socketURI='http://54.191.191.191:8080';
+        socketURI='http://' + RemoteHost.ip + ':8080';
                  
     } else {
         socketURI='/';
