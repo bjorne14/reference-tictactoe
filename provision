@@ -27,9 +27,9 @@ PROVISIONED_HOST_CONFIG=./client/remotehost.json
 EC2_HOSTS_FOLDER=./hosts
 
 # Relative folder where ssh keys should be stored (If you wish to run any tests except unit-tets locally remember to retrieve keys).
-SSH_KEY_FOLDER=../../../sshkeys/
+SSH_KEY_FOLDER=../../
 
-function usage {
+usage () {
     echo "Usage ./provision STAGE STATE"
     echo "STAGE     - Stage that host will be used for?"
     echo "      ACC - Acceptance stage"
@@ -42,7 +42,7 @@ function usage {
     exit 1
 }
 
-function reuse {     
+reuse () {     
 
     for file in $EC2_HOSTS_FOLDER/$1*;
     do
@@ -59,7 +59,7 @@ function reuse {
         #ERROR CHECKING (lets assume for now that ensuring its correct is manual, will fix)..
 
         echo "Found available host for STAGE "$1         
-        if [ $2 == "RR" ]; then
+        if [ $2 = "RR" ]; then
             echo "Rebooting host instance this might take a while.."
             aws ec2 reboot-instances --instance-ids $ID --region $REGION
             status="unknown"
@@ -97,7 +97,7 @@ fi
 if [ ! -d $EC2_HOSTS_FOLDER ]; then
     mkdir $EC2_HOSTS_FOLDER
 fi
-
-if [[ $2 == R* ]]; then
+if [ "$2" = "R" ] || [ "$2" = "RR" ];
+then
     reuse $1 $2
 fi

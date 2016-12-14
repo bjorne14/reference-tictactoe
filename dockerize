@@ -13,8 +13,8 @@ DOCKER_FILE="."
 # Helper function for checking error codes of function calls, on error it reports it and exits the script
 #   Param1: Return value of function call
 #   Param2: Error message to display.
-function checkError {
-    if [[ $1 != 0 ]]; then
+checkError () {
+    if [ $1 -ne 0 ]; then
         echo $2
         exit $1
     fi
