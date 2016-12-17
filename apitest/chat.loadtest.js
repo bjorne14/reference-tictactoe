@@ -13,7 +13,7 @@ const testAPI = TestAPI(inject({
     RoutingContext
 }));
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 6200;
 
 describe('User chat load test', function(){
 
@@ -27,7 +27,7 @@ describe('User chat load test', function(){
     });
 
     const count = 200;
-    const timelimit = 2000;
+    const timelimit = 6000;
 
     it('should connect and send ' + count + '  user messages within '+ timelimit +'ms',function(done){
 
@@ -56,7 +56,6 @@ describe('User chat load test', function(){
                     done.fail(duration + " exceeds limit " + timelimit);
                 } else {
                     done();
-
                 }
             });
     });
