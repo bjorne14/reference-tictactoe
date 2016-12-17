@@ -36,19 +36,29 @@ module.exports=function(injected){
             },
             expectGameWon:()=>{
                 waitingFor.push("expectGameWon");
-                routingContext.eventRouter.on("GameWon", function(gameEvent){
+                routingContext.eventRouter.on('GameWon', function(gameEvent){
                     expect(gameEvent.side).not.toBeUndefined();
-                    if(game.gameId === gameEvent.gameId && game.side === gameEvent.side){
+                    if(game.gameId === gameEvent.gameId){
                         waitingFor.pop();
                     }
                 });
                 return me;
             },            
             expectMoveMade:()=>{
-                waitingFor.push("expectMoveMade");
+                waitingFor.push("expectMovePlaced");
                 routingContext.eventRouter.on("MovePlaced", function(gameEvent){
-                    expect(gameEvent.side).not.toBeUndefined();
-                    if(game.gameId === gameEvent.gameId && game.side === gameEvent.side){
+                    expect(gameEvent.side).not.toBeUndefined();                    
+
+                    var t = waitingFor[waitingFor.length - 1 ];
+                    /**
+                     * GameWon/Draw will be sent with MovePlaced, so if we receive an MovePlaced we set the queue
+                     * to GameWon/Draw
+                     * */
+                    if(t === "expectGameWon" || t === "expectGameDraw"){
+                        waitingFor = [];
+                        waitingFor.push(t);
+                    }                    
+                    else if(game.gameId === gameEvent.gameId){
                         waitingFor.pop();
                     }
                 });

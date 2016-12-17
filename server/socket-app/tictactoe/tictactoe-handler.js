@@ -31,7 +31,8 @@ module.exports = function(injected){
                             }]);
                             return;
                         }
-
+                        
+                        gameState.setGameFull();
                         eventHandler([{
                             gameId: cmd.gameId,
                             type: "GameJoined",
@@ -77,11 +78,11 @@ module.exports = function(injected){
                             side: cmd.side,
                             coordinates: cmd.coordinates
                         };
-                        // Check here for conditions which may warrant additional events to be emitted (win/draw).
-                        if(gameState.gameDraw(cmd.side, cmd.coordinates)){
+
+                        if(gameState.gameWon(cmd.side, cmd.coordinates)){
                             eventHandler([ placeMent ,{
                                 gameId: cmd.gameId,
-                                type: "GameDraw",
+                                type: "GameWon",
                                 user: cmd.user,
                                 name: cmd.name,
                                 timeStamp: cmd.timeStamp,
@@ -90,10 +91,11 @@ module.exports = function(injected){
                             return;
                         }
 
-                        if(gameState.gameWon(cmd.side, cmd.coordinates)){
+                        // Check here for conditions which may warrant additional events to be emitted (win/draw).
+                        if(gameState.gameDraw(cmd.side, cmd.coordinates)){
                             eventHandler([ placeMent ,{
                                 gameId: cmd.gameId,
-                                type: "GameWon",
+                                type: "GameDraw",
                                 user: cmd.user,
                                 name: cmd.name,
                                 timeStamp: cmd.timeStamp,

@@ -16,12 +16,14 @@ const testAPI = TestAPI(inject({
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
 describe('Tictactoe API', function () {
     var userA, userB;
+    var userC;
     beforeEach(function (done) {
         var testapi = testAPI();
         testapi.waitForCleanDatabase().cleanDatabase().then(()=> {
             testapi.disconnect();
             userA = userAPI();
             userB = userAPI();
+            userC = userAPI();
             done();
         });
     });
@@ -40,7 +42,6 @@ Notice especially the passing of gameId from userA to userB. This is a must in t
 played in lock-step. All "expectXXX" functions must check for matching gameId, otherwise this will not work
 for a load test where multiple users will be playing.
 */
-
         userA.expectGameCreated().createGame().then(()=> {           
                 userB.expectGameJoined().joinGame(userA.getGame().gameId).then(function () {                    
                     userA.expectMoveMade().placeMove(0, 0).then(()=> {
@@ -52,7 +53,7 @@ for a load test where multiple users will be playing.
                                 userB.expectMoveMade().placeMove(0, 2).then(()=> {
                                     userB.expectMoveMade(); // By other user
                                     userA.expectMoveMade().placeMove(2, 2)
-                                        .expectGameWon().then(done); // Winning move
+                                        .expectGameWon().then(done);                                   
                                 })
                             })
                         });
@@ -60,6 +61,7 @@ for a load test where multiple users will be playing.
                 })
             }
         );
+        
     });
 
 });

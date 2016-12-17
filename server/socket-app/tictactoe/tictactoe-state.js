@@ -1,18 +1,19 @@
 var _ = require('lodash');
 
 module.exports = function (injected) {
-    var isGameFull = false;
-    var occupiedCells = 0;
-    var lastPlacedPlayer = "none";
-    // '-' indicates that the cell is free for occupation
-    var board = [
-        ['-', '-', '-'],
-        ['-', '-', '-'],
-        ['-', '-', '-']
-    ];
-
     return function (history) {
+        var isGameFull = false;
+        var occupiedCells = 0;
+        var lastPlacedPlayer = "none";
+        // '-' indicates that the cell is free for occupation
+        var board = [
+             ['-', '-', '-'],
+             ['-', '-', '-'],
+             ['-', '-', '-']
+        ];
+
         function clear(){
+            occupiedCells = 0;
             isGameFull = false;
             lastPlacedPlayer = "none";
             for(i = 0; i < 3; i++){
@@ -34,8 +35,6 @@ module.exports = function (injected) {
         }
 
         function processEvents(history) {
-            occupiedCells = 0;
-            clear();
            _.each(history, processEvent);
         }
         
@@ -52,9 +51,6 @@ module.exports = function (injected) {
         }
 
         function gameDraw(side, cords){
-            if(gameWon(side, cords)){
-                return false;
-            }
             return occupiedCells === 9;
         }
 
@@ -66,9 +62,10 @@ module.exports = function (injected) {
             // Check if player has occupied 3 cells along the diagonal
             if((board[0][0] == side && board[1][1] == side && board[2][2] == side) ||
                     (board[2][0] == side &&  board[1][1] == side && board[0][2] == side)){
+
                 return true;
             }
-            for(i = 0; i < 3; i++){
+            for(var i = 0; i < 3; i++){
                 if(board[i][0] == side && board[i][1] == side && board[i][2] == side){
                     return true;
                 }
@@ -79,13 +76,19 @@ module.exports = function (injected) {
 
             return false;
         }
+        
+        function setGameFull(){
+            isGameFull = true;
+        }
 
         function gameFull(){
             return isGameFull;
         }
+
         processEvents(history);
 
         return {
+            setGameFull: setGameFull,
             processEvents: processEvents,
             gameFull: gameFull,
             isCellOccupied: isCellOccupied,
