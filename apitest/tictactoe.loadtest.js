@@ -5,7 +5,7 @@ var TestAPI = require('./fluentapi/test-api');
 
 // TicTacToe load-test settings
 const count = 75;
-const timelimit = 12000;
+const timelimit = 22000;
 var startMillis;
 var endMillis;
 var games = 0;
@@ -21,7 +21,7 @@ const testAPI = TestAPI(inject({
     RoutingContext
 }));
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 17000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
 
 /**
  * Starts an tictactoe game. I choose to keep all the clients active for a more realistic test
@@ -49,7 +49,6 @@ function playGame(done){
                                             userA.disconnect();
                                             userB.disconnect();
                                             games--;
-                                            console.log(games); 
                                             if(games === 0){
                                                 endMillis = new Date().getTime();  
                                                 var duration = endMillis - startMillis;  
