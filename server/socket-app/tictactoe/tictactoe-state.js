@@ -5,11 +5,12 @@ module.exports = function (injected) {
         var isGameFull = false;
         var occupiedCells = 0;
         var lastPlacedPlayer = "none";
+
         // '-' indicates that the cell is free for occupation
         var board = [
-             ['-', '-', '-'],
-             ['-', '-', '-'],
-             ['-', '-', '-']
+            ['-', '-', '-'],
+            ['-', '-', '-'],
+            ['-', '-', '-']
         ];
 
         function clear(){
@@ -58,6 +59,10 @@ module.exports = function (injected) {
             // Occupy the cell for the player.
             board[cords.y][cords.x] = side;
             occupiedCells++;
+
+            if(occupiedCells < 5){
+                return false;
+            }
 
             // Check if player has occupied 3 cells along the diagonal
             if((board[0][0] == side && board[1][1] == side && board[2][2] == side) ||
