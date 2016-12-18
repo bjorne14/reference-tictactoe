@@ -52,7 +52,6 @@ module.exports=function(injected){
             });
         },
         loadEvents:function(aggregateId, errCb, successCb){
-//            var startTimer = new Date().getTime();
             dbPool.connect(function(err, connection, done) {
                 if(err) {
                     return console.error('error fetching db connection from pool', err);
@@ -74,10 +73,6 @@ module.exports=function(injected){
                             return JSON.parse(row.json);
                         });
 
-                        //var endTime = new Date().getTime();
-                        //var elapsed = endTime - startTimer;
-                        //console.debug(statement, "took", elapsed, "ms to execute");
-                        successCb(events);
                     }
                 });
             });
