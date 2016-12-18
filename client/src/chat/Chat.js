@@ -54,7 +54,9 @@ export default function(injected){
         render(){
 
             var messages = _.map(this.state.messageList, (message, idx)=>{
-                return <span key={idx} className="msg">{message.sender.userName} says {message.message}<p></p></span>
+                return <span key={idx}>
+                    <span className="chatAuthor">{message.sender.userName} says :</span>
+                    <span className="chatMsg"> {message.message}</span><p></p></span>
             });
 
             return (

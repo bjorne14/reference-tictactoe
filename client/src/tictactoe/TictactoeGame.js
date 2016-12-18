@@ -54,15 +54,16 @@ export default function (injected) {
                 })
             };
             
-            const illegalMove = (placement)=>{               
-                this.setState({lastMoveClasses:"gameInfo notmyturn"});
-                this.setState({lastMoveStatusMsg:"That's an illegal move.."});
+            const illegalMove = (placement)=>{              
+                if(this.state.currentGame.gameId === placement.gameId && placement.side === this.state.currentGame.side){                                this.setState({lastMoveClasses:"gameInfo movementErrorMsg"});
+                    this.setState({lastMoveStatusMsg:"That's an illegal move.."});
+                }
             };
 
             const notYourTurn = (placement)=>{
                 if(this.state.currentGame.gameId === placement.gameId && placement.side === this.state.currentGame.side){
                     var statusMsg="It's not your turn";
-                    this.setState({lastMoveClasses:"gameInfo notmyturn"});
+                    this.setState({lastMoveClasses:"gameInfo movementErrorMsg"});
                     this.setState({lastMoveStatusMsg:statusMsg});
                 }
 
@@ -88,8 +89,8 @@ export default function (injected) {
                         nextTurn="X";
                     }
 
-                    if(this.state.lastMoveClasses !== "gameInfo myturn"){                    
-                        this.setState({lastMoveClasses:"gameInfo myturn"});
+                    if(this.state.lastMoveClasses !== "gameInfo movementMsg"){                    
+                        this.setState({lastMoveClasses:"gameInfo movementMsg"});
                     }
 
                     this.setState({lastMoveStatusMsg:statusMsg});
@@ -197,14 +198,15 @@ export default function (injected) {
                 } else {
                     gameEnd = <span>Draw!</span>
                 }
-                gameOver = <div>Game over: {gameEnd} </div>
+                gameOver = <div><span className="gameOverNotifier">Game over:</span> {gameEnd} </div>
             }
             if(this.state.currentGame.gameId){
                 playerInformation=<div className="gameInfo">You are playing as {this.state.currentGame.side}</div>
                 hasTurnInformation=<div className="gameInfo">It is player {this.state.hasTheTurn} turn to make a move</div>
                 lastMoveStatus=<div className={this.state.lastMoveClasses}>{this.state.lastMoveStatusMsg}</div>
 
-                gameView = <TictactoeBoard gameId={this.state.currentGame.gameId} mySide={this.state.currentGame.side} name={this.state.currentGame.name} myName={this.state.currentGame.myName}></TictactoeBoard>
+                gameView = <TictactoeBoard gameId={this.state.currentGame.gameId} mySide={this.state.currentGame.side} 
+                    name={this.state.currentGame.name} myName={this.state.currentGame.myName}></TictactoeBoard>
             }
             return (<div className="TictactoeGame">
                 {gameOver}

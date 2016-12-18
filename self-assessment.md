@@ -3,7 +3,8 @@
 
 1. Game URL (AWS)
     - http://54.214.138.120:8080/
-
+2. Jenkins URL
+    - http://82.221.49.126:8080/
 
 ## Scripts
 

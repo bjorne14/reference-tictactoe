@@ -4,9 +4,12 @@ div.Chat{
 div.ConnectedUsers{
     padding: 7%;
 }
-span.msg{
+span.chatMsg, span.chatAuthor{
     width: 100%;
     word-wrap:break-word;
     display: inline-block;
-    text-align:center;
 }
+span.chatAuthor{
+    font-weight:bold;
+}
+

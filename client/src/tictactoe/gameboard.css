@@ -1,53 +1,57 @@
 .TictactoeBoard{
     text-align: center;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+    width: 100%;
 }
 .TictactoeGame{
-    width: 75%;
+    width: 70%;
 }
 
 .ticrow{
     display: block;
     width: 100%;
-    height: 100px;
+    height: 132px;
 }
 
 .ticcell{
     display: block;
-    width: 25%;
-    height: 90px;
+    width: 32.2%;
+    height: 130px;
     float: left;
-    margin: 1%;
+    margin: 0.5%;
     background-color: rgba(48, 214, 251, 0.38);
     font-weight: bold;
-    font-size: 4em;
+    font-size: 6em;
 }
 
 .ticcell:hover{
-    background-color: rgba(63, 251, 84, 0.38);
+    background-color: rgba(48, 214, 251, 0.18);
 }
 
-.myturn{
+.movementMsg{
     background-color: #8ec799;
 }
 
-.notmyturn{
+.movementErrorMsg{
     background-color: rgba(255, 0, 0, 0.51);
 }
 
+span.gameOverNotifier{
+    font-weight:bold;
+    margin-bottom: 1%;
+}
 div.board{
     display: block;
     border: none;
-    padding: 5px 5px 5px 5px;
+    width: 60%;
+    padding: 5px 5px 7px 5px;
+    border-bottom: 1px solid black;
     cursor: pointer;
 }
 .gameInfo{
     float:left;
     width: 58%;
     text-align:center;
-    margin-left: 13%;
+    margin-left: 1%;
     font-weight:bold;
     display: block;
     padding: 5px;
