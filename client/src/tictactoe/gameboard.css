@@ -1,21 +1,28 @@
 .TictactoeBoard{
     text-align: center;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.TictactoeGame{
+    width: 75%;
 }
 
 .ticrow{
-    background: lightgray;
     display: block;
-    max-width: 220px;
+    width: 100%;
+    height: 100px;
 }
 
 .ticcell{
-    display: inline-block;
-    width: 60px;
-    height: 60px;
-    margin: 6px;
+    display: block;
+    width: 25%;
+    height: 90px;
+    float: left;
+    margin: 1%;
     background-color: rgba(48, 214, 251, 0.38);
-    text-align: center;
-    vertical-align: middle;
+    font-weight: bold;
+    font-size: 4em;
 }
 
 .ticcell:hover{
@@ -27,7 +34,7 @@
 }
 
 .notmyturn{
-    background-color: rgba(232, 181, 16, 0.51);
+    background-color: rgba(255, 0, 0, 0.51);
 }
 
 div.board{
@@ -37,6 +44,11 @@ div.board{
     cursor: pointer;
 }
 .gameInfo{
+    float:left;
+    width: 58%;
+    text-align:center;
+    margin-left: 13%;
     font-weight:bold;
     display: block;
+    padding: 5px;
 }

@@ -20,6 +20,8 @@ export default function (injected) {
 
                 },
                 openGames:{},
+                lastMoveStatusMsg:"",
+                lastMoveClasses:""
             }
         }
         //noinspection JSUnusedGlobalSymbols
@@ -52,8 +54,26 @@ export default function (injected) {
                 })
             };
 
-            const updateGameInfo = (placement)=>{
+            const notYourTurn = (placement)=>{
+                if(this.state.currentGame.gameId === placement.gameId && placement.side === this.state.currentGame.side){
+                    var statusMsg="It's not your turn";
+                    this.setState({lastMoveClasses:"gameInfo notmyturn"});
+                    this.setState({lastMoveStatusMsg:statusMsg});
+                }
+
+            };
+
+            const movePlaced = (placement)=>{
                 if(this.state.currentGame.gameId === placement.gameId){
+                    var player;
+                    if(placement.side === this.state.currentGame.side){
+                        player = "You";
+                    }
+                    else{
+                        player = "Your opponent";
+                    }
+
+                    var statusMsg=player + " occupied cell (" + placement.coordinates.x + "," + placement.coordinates.y + ")";
 
                     var nextTurn=this.state.hasTheTurn;
                     if(this.state.hasTheTurn === "X"){
@@ -62,6 +82,12 @@ export default function (injected) {
                     else{
                         nextTurn="X";
                     }
+
+                    if(this.state.lastMoveClasses !== "gameInfo myturn"){                    
+                        this.setState({lastMoveClasses:"gameInfo myturn"});
+                    }
+
+                    this.setState({lastMoveStatusMsg:statusMsg});
                     this.setState({hasTheTurn:nextTurn});
                 }
             };
@@ -102,7 +128,9 @@ export default function (injected) {
                     })
                 }
             };
-            eventRouter.on('MovePlaced', updateGameInfo); 
+
+            eventRouter.on('NotYourTurn', notYourTurn); 
+            eventRouter.on('MovePlaced', movePlaced); 
             eventRouter.on('GameJoined', gameJoined);
             eventRouter.on('GameCreated', gameCreated);
             eventRouter.on('GameWon', gameOver);
@@ -147,6 +175,8 @@ export default function (injected) {
             });
             var playerInformation="";
             var hasTurnInformation="";
+            var lastMoveStatus="";
+
             var gameOver=undefined;
 
             var gameView = <div>
@@ -165,17 +195,19 @@ export default function (injected) {
                 gameOver = <div>Game over: {gameEnd} </div>
             }
             if(this.state.currentGame.gameId){
-                playerInformation=<div className="gameInfo">You are {this.state.currentGame.side}</div>
-                hasTurnInformation=<div className="gameInfo">Player {this.state.hasTheTurn} turn to make a move</div>
+                playerInformation=<div className="gameInfo">You are playing as {this.state.currentGame.side}</div>
+                hasTurnInformation=<div className="gameInfo">It is player {this.state.hasTheTurn} turn to make a move</div>
+                lastMoveStatus=<div className={this.state.lastMoveClasses}>{this.state.lastMoveStatusMsg}</div>
 
-                gameView = <TictactoeBoard gameId={this.state.currentGame.gameId} mySide={this.state.currentGame.side} name={this.state.currentGame.name} myName={this.state.currentGame.myName}  ></TictactoeBoard>
+                gameView = <TictactoeBoard gameId={this.state.currentGame.gameId} mySide={this.state.currentGame.side} name={this.state.currentGame.name} myName={this.state.currentGame.myName}></TictactoeBoard>
             }
             return (<div className="TictactoeGame">
                 {gameOver}
                 {gameView}
-                {playerInformation}          
+                {playerInformation}
                 {hasTurnInformation}
-            </div>);
+                {lastMoveStatus}
+           </div>);
         }
     }
 
