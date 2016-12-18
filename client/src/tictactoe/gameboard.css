@@ -35,5 +35,8 @@ div.board{
     border: none;
     padding: 5px 5px 5px 5px;
     cursor: pointer;
-
+}
+.gameInfo{
+    font-weight:bold;
+    display: block;
 }

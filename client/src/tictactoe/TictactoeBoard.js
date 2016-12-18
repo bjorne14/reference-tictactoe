@@ -10,8 +10,8 @@ export default function (injected) {
             for(var y=0;y<3;y++){
                 var cells = [];
                 for(var x=0;x<3;x++){
-                    cells.push(<TicCell key={x} coordinates={{ x:x, y:y}} gameId={this.props.gameId} mySide={this.props.mySide}>
-                            </TicCell>);
+                    cells.push(<TicCell key={x} coordinates={{ x:x, y:y}} gameId={this.props.gameId} mySide={this.props.mySide}
+                            gameName={this.props.name} myName={this.props.myName} ></TicCell>);
                 }
                 rows.push(<div key={y} className="ticrow">{cells}</div>);
             }

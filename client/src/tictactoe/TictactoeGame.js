@@ -19,7 +19,7 @@ export default function (injected) {
                 currentGame:{
 
                 },
-                openGames:{}
+                openGames:{},
             }
         }
         //noinspection JSUnusedGlobalSymbols
@@ -37,9 +37,12 @@ export default function (injected) {
                         gameOver:undefined,
                         currentGame:{
                             gameId:gameJoined.gameId,
-                            side:gameJoined.side
+                            side:gameJoined.side,
+                            name:gameJoined.name,
+                            myName:this.state.session.userName,
                         }
                     });
+                    this.setState({hasTheTurn:'X'});
                 }
 
                 var openGames = this.state.openGames;
@@ -47,8 +50,20 @@ export default function (injected) {
                 this.setState({
                     openGames:openGames
                 })
+            };
 
+            const updateGameInfo = (placement)=>{
+                if(this.state.currentGame.gameId === placement.gameId){
 
+                    var nextTurn=this.state.hasTheTurn;
+                    if(this.state.hasTheTurn === "X"){
+                        nextTurn="O";
+                    }
+                    else{
+                        nextTurn="X";
+                    }
+                    this.setState({hasTheTurn:nextTurn});
+                }
             };
 
             const gameCreated = (gameCreated)=>{
@@ -61,9 +76,12 @@ export default function (injected) {
                         gameOver:undefined,
                         currentGame:{
                             gameId:gameCreated.gameId,
-                            side:gameCreated.side
+                            side:gameCreated.side,
+                            name:gameCreated.name,
+                            myName:this.state.session.userName
                         }
                     });
+                    this.setState({hasTheTurn:'X'});
                 } else{
                     // Game that someone else created, add to open games.
                     openGames[gameCreated.gameId]=gameCreated;
@@ -75,10 +93,7 @@ export default function (injected) {
 
 
             const gameOver = (gameOver)=>{
-
                 if(this.state.currentGame.gameId===gameOver.gameId){
-                    console.log("GAME OVER OBJECT IN CLIENT");
-                    console.log(gameOver);
                     this.setState({
                         gameOver:gameOver,
                         currentGame:{
@@ -87,7 +102,7 @@ export default function (injected) {
                     })
                 }
             };
-
+            eventRouter.on('MovePlaced', updateGameInfo); 
             eventRouter.on('GameJoined', gameJoined);
             eventRouter.on('GameCreated', gameCreated);
             eventRouter.on('GameWon', gameOver);
@@ -110,7 +125,8 @@ export default function (injected) {
             commandPort.routeMessage({
                 commandId:cmdId,
                 type:"CreateGame",
-                gameId:generateUUID()
+                gameId:generateUUID(),
+                name:generateUUID()
             });
         }
         joinGame(game){
@@ -129,8 +145,10 @@ export default function (injected) {
                     <span>{openGame.userSession.userName}</span> <button type="button" role="button" onClick={this.joinGame(openGame)}> Join</button>
                 </div>
             });
-
+            var playerInformation="";
+            var hasTurnInformation="";
             var gameOver=undefined;
+
             var gameView = <div>
                 <button type="button" role="button" onClick={this.createGame}>Create new game</button>
                 <h2>Open games:</h2>
@@ -147,11 +165,16 @@ export default function (injected) {
                 gameOver = <div>Game over: {gameEnd} </div>
             }
             if(this.state.currentGame.gameId){
-                gameView = <TictactoeBoard gameId={this.state.currentGame.gameId} mySide={this.state.currentGame.side}></TictactoeBoard>
+                playerInformation=<div className="gameInfo">You are {this.state.currentGame.side}</div>
+                hasTurnInformation=<div className="gameInfo">Player {this.state.hasTheTurn} turn to make a move</div>
+
+                gameView = <TictactoeBoard gameId={this.state.currentGame.gameId} mySide={this.state.currentGame.side} name={this.state.currentGame.name} myName={this.state.currentGame.myName}  ></TictactoeBoard>
             }
             return (<div className="TictactoeGame">
                 {gameOver}
                 {gameView}
+                {playerInformation}          
+                {hasTurnInformation}
             </div>);
         }
     }

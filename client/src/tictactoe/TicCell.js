@@ -30,8 +30,8 @@ export default function (injected) {
                 commandId: generateUUID(),
                 gameId: this.props.gameId,
                 type: "PlaceMove",
-                user: { userName: "not sure how this is injected" },
-                name: "not sure how this is injected", 
+                user: { userName: this.props.myName },
+                name: this.props.gameName, 
                 timeStamp: timeOfMove,
                 side: this.props.mySide,
                 coordinates: this.props.coordinates             
