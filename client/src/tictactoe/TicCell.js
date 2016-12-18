@@ -22,7 +22,6 @@ export default function (injected) {
                     this.state.side = placement.side;
                 }
             };
-            
             eventRouter.on('MovePlaced', movePlaced);          
         }
 

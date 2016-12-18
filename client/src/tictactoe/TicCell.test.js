@@ -70,6 +70,10 @@ describe("Tic Cell", function () {
     });
 
     it('should ignore move with matching coordinates, but not matching gameId',function(){
+        var oldSide = component.state('side');
+        move.coordinates = myCords;
+        eventRouter.routeMessage(move);
+        expect(component.state('side')).toBe(oldSide);
     });
 
     it('should issue PlaceMove command with gameId, mySide and coordinates when clicked', ()=>{
