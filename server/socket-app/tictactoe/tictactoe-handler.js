@@ -55,7 +55,9 @@ module.exports = function(injected){
                             }]);
                             return;                           
                         }
-                        if(gameState.isOutOfBounds(cmd.coordinates) || gameState.isCellOccupied(cmd.coordinates)){
+                        if(!gameState.gameFull() || gameState.isOutOfBounds(cmd.coordinates) 
+                                || gameState.isCellOccupied(cmd.coordinates)){
+
                             eventHandler([{
                                 gameId: cmd.gameId,
                                 type: "IllegalMove",
