@@ -14,6 +14,9 @@ var commandRouter = MessageRouter(inject({}));
 var eventRouter = MessageRouter(inject({}));
 var commandsReceived=[];
 
+// A move to 'perform' in order to check how the cells acts with correct/wrong information.(overwrite props as needed)
+var move;
+
 commandRouter.on("*", function(cmd){
     commandsReceived.push(cmd);
 } );
@@ -30,7 +33,19 @@ beforeEach(function () {
     div = document.createElement('div');
     myCords = {x: 0, y:0 };
     side = 'X';
-    gameIdUUID = 'uuid';
+    gameIdUUID = 'uuid'; 
+
+    var timeOfMove = new Date().toISOString();
+    move = {
+        commandId: 'so command',
+        gameId: 'aId',
+        type: 'MovePlaced',
+        user: { userName: 'the other player' },
+        name: 'so name',
+        timeStamp: timeOfMove,
+        side: 'O',
+        coordinates: { x:1, y:0}
+    };
 
     component = shallow(<TicCell />, div);
     component.setProps({coordinates: myCords, mySide: side, gameId: gameIdUUID});
@@ -41,6 +56,10 @@ describe("Tic Cell", function () {
     });
 
     it('should record move with matching game id and coordinates ',function(){
+        move.coordinates = myCords;
+        move.gameId = gameIdUUID;
+        eventRouter.routeMessage(move);
+        expect(component.state('side')).toBe(move.side);
     });
 
     it('should ignore move with matching gameId but not coordinates',function(){
