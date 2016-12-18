@@ -13,6 +13,9 @@ if [ $# -ne 3 ]; then
     echo "Usage: ./deploy keyfile remote-user ip"
     exit
 fi
+# Scp necessary files onto the host
 scp -o StrictHostKeyChecking=no -i $1 ".env" "docker-compose.yml" $2@$3":."
+
+# Shutdown running containers(if any) and start the application
 ssh -o StrictHostKeyChecking=no -i $1 $2@$3 "docker-compose down && docker-compose up -d --build"
 

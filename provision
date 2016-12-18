@@ -2,8 +2,8 @@
 #  
 # Script which provisions an host instance for an stage.
 # To reuse an existing host instance, it will go through the host folder (if existing).
-# The script will set the environment variables STAGE_IP/USER/SEC_GROUP in this shell, so if you wish to use those
-# remember to use sourcing (i.e . ./provision STAGE STATE)
+# The script will set the environment variables STAGE_IP/USER/SEC_GROUP in this shell,
+# so if you wish to use those (WHICH WE RECOMMEND) remember to use sourcing (i.e, . ./provision STAGE STATE)
 #
 # Information about the host found will be printed out "pretty" to STDOUT in the following format:
 # HOST:
@@ -16,9 +16,10 @@
 # This is suitable to log information about instances used for stages or errors with host instances/config, this could 
 # also be used to retrieve the information from another script by using "grep "field" | cut -d: -f2"
 #
-# Author: Björn Ingemar Elfström
 # TODO: Implement creation of host on option set/fall back on reuse behaviour, remove configuration files for
 # hosts that are no longer online (or malformed)
+#
+# Author: Björn Ingemar Elfström
 
 # Config file for the host that gets provisioned, it's needed so that acceptance/capacity test's know which host to test against.
 PROVISIONED_HOST_CONFIG=./client/remotehost.json
@@ -76,7 +77,7 @@ reuse () {
                 
                 sleep 2                
             done
-            # Now we need to turn on error again, since if the will loop succeeds we shouldn't get any errors.
+            # Now we need to turn on error again, since if the while loop succeeds we shouldn't get any errors.
             set -e
         fi
 

@@ -73,8 +73,6 @@ function playGame(done){
         );  
     }
 
-
-
 describe('User tictactoe load test', function(){
 
     beforeEach(function(done){
