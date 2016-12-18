@@ -72,6 +72,7 @@ module.exports=function(injected){
                         var events = _.map(result.rows, function(row){
                             return JSON.parse(row.json);
                         });
+                        successCb(events);
 
                     }
                 });
