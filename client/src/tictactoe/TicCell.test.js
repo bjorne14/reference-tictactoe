@@ -63,6 +63,10 @@ describe("Tic Cell", function () {
     });
 
     it('should ignore move with matching gameId but not coordinates',function(){
+        var oldSide = component.state('side');
+        move.gameId = gameIdUUID;
+        eventRouter.routeMessage(move);
+        expect(component.state('side')).toBe(oldSide);
     });
 
     it('should ignore move with matching coordinates, but not matching gameId',function(){
