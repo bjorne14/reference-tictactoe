@@ -4,7 +4,7 @@ module.exports = function (injected) {
     return function (history) {
         var isGameFull = false;
         var occupiedCells = 0;
-        var lastPlacedPlayer = "none";
+        var lastPlacedPlayer = "O";
 
         // '-' indicates that the cell is free for occupation
         var board = [
@@ -59,7 +59,7 @@ module.exports = function (injected) {
             // Occupy the cell for the player.
             board[cords.y][cords.x] = side;
             occupiedCells++;
-
+            lastPlacedPlayer = side;    
             if(occupiedCells < 5){
                 return false;
             }

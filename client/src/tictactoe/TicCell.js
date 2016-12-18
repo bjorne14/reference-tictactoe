@@ -18,8 +18,7 @@ export default function (injected) {
             const movePlaced = (placement)=>{
                 if(placement.gameId === this.props.gameId && placement.coordinates.x === this.props.coordinates.x 
                         && placement.coordinates.y === this.props.coordinates.y) {
-
-                    this.state.side = placement.side;
+                    this.setState({ side: placement.side});
                 }
             };
             eventRouter.on('MovePlaced', movePlaced);          
@@ -41,7 +40,7 @@ export default function (injected) {
         }
 
         render() {
-            return <div onClick = {this.makeMove} className="ticcell">
+            return <div onClick={this.makeMove} className="ticcell">
                 {this.state.side}
             </div>
         }
