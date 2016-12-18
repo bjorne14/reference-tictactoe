@@ -53,6 +53,11 @@ export default function (injected) {
                     openGames:openGames
                 })
             };
+            
+            const illegalMove = (placement)=>{               
+                this.setState({lastMoveClasses:"gameInfo notmyturn"});
+                this.setState({lastMoveStatusMsg:"That's an illegal move.."});
+            };
 
             const notYourTurn = (placement)=>{
                 if(this.state.currentGame.gameId === placement.gameId && placement.side === this.state.currentGame.side){
@@ -128,7 +133,7 @@ export default function (injected) {
                     })
                 }
             };
-
+            eventRouter.on('IllegalMove', illegalMove);
             eventRouter.on('NotYourTurn', notYourTurn); 
             eventRouter.on('MovePlaced', movePlaced); 
             eventRouter.on('GameJoined', gameJoined);
