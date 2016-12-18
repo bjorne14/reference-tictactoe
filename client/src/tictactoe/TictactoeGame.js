@@ -77,6 +77,8 @@ export default function (injected) {
             const gameOver = (gameOver)=>{
 
                 if(this.state.currentGame.gameId===gameOver.gameId){
+                    console.log("GAME OVER OBJECT IN CLIENT");
+                    console.log(gameOver);
                     this.setState({
                         gameOver:gameOver,
                         currentGame:{
@@ -138,7 +140,7 @@ export default function (injected) {
             if(this.state.gameOver){
                 var gameEnd;
                 if(this.state.gameOver.type==='GameWon'){
-                    gameEnd = <span>{this.state.gameOver.move.side} won the game!</span>
+                    gameEnd = <span>{this.state.gameOver.side} won the game!</span>
                 } else {
                     gameEnd = <span>Draw!</span>
                 }
