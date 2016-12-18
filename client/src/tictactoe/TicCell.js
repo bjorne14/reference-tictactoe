@@ -9,13 +9,31 @@ export default function (injected) {
         constructor() {
             super();
             this.state = {
+                side: ""
             }
+
+            this.makeMove = this.makeMove.bind(this);
         }
         componentWillMount(){
         }
+
+        makeMove(){
+            var timeOfMove = new Date().toISOString();
+            var move = {
+                commandId: generateUUID,
+                gameId: this.props.gameId,
+                type: "PlaceMove",
+                user: { userName: "not sure how this is injected" },
+                name: "not sure how this is injected", 
+                timeStamp: timeOfMove,
+                side: this.props.mySide,
+                coordinates: this.props.coordinates             
+            };
+            commandPort.routeMessage(move);
+        }
         render() {
-            return <div className="ticcell">
-                CELL
+            return <div onClick = {this.makeMove} className="ticcell">
+                {this.state.side}
             </div>
         }
     }

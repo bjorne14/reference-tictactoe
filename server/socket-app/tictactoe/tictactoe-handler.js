@@ -7,7 +7,6 @@ module.exports = function(injected){
         var gameState = TictactoeState(history);
         return {
             executeCommand: function(cmd, eventHandler){
-
                 var cmdHandlers = {
                     "CreateGame": function (cmd) {
                         eventHandler([{
