@@ -75,7 +75,7 @@ I created the following tests.
 
 - Capacity Stage
 	1. The test results from the Acceptance Stage is removed.
-	2. An capacity stage host is reboQoted by the provision script.
+	2. An capacity stage host is rebooted by the provision script.
 	3. The application is deployed onto the rebooted instance.
 	4. Waits 20s in order to let the database and server to be established.
 	5. The load test is executed against the remote host.
